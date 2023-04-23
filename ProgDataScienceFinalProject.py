@@ -59,5 +59,61 @@ travel_sector = 'DAL'
 real_estate_sector = 'SPG'
 precious_metals = 'GLD'
 
+"""**Step 5:** Use AlphaVantage (the stock API used earlier in the course) to get the daily high and low prices for your selected stocks"""
+
+def readSelectedStockDetails(symbol, stockMarketType):
+    request_url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={symbol}&apikey={apikey}'
+    response = requests.get(request_url)
+    data = response.json()['Time Series (Daily)']
+    data_df = pd.DataFrame.from_dict(data, orient='index')
+    data_df.columns = ['open', stockMarketType+'(high)', stockMarketType+'(low)', 'close', 'adjusted close', 'volume','divident amount','split coefficient']
+    return data_df[[stockMarketType+'(high)', stockMarketType+'(low)']]
+
+overall_american_market_df = readSelectedStockDetails(overall_american_market, 'American Market')
+print(overall_american_market_df)
+overall_canadian_market_df = readSelectedStockDetails(overall_canadian_market, 'Canadian Market')
+print(overall_canadian_market_df)
+travel_sector_df = readSelectedStockDetails(travel_sector, 'Travel Sector')
+print(travel_sector_df)
+real_estate_sector_df = readSelectedStockDetails(real_estate_sector, 'RealEstate Sector')
+print(real_estate_sector_df)
+precious_metals_df = readSelectedStockDetails(precious_metals, 'Precious Metals')
+print(precious_metals_df)
+
+"""**Step 6:**	Append that info to the data frame created in step 3"""
+
+# convert the index to datetime format
+overall_american_market_df.index = pd.to_datetime(overall_american_market_df.index)
+# format the date index as '1/25/20'
+overall_american_market_df.index = overall_american_market_df.index.strftime('%-m/%-d/%y')
+# convert the index to datetime format
+overall_canadian_market_df.index = pd.to_datetime(overall_canadian_market_df.index)
+# format the date index as '1/25/20'
+overall_canadian_market_df.index = overall_canadian_market_df.index.strftime('%-m/%-d/%y')
+# convert the index to datetime format
+travel_sector_df.index = pd.to_datetime(travel_sector_df.index)
+# format the date index as '1/25/20'
+travel_sector_df.index = travel_sector_df.index.strftime('%-m/%-d/%y')
+# convert the index to datetime format
+real_estate_sector_df.index = pd.to_datetime(real_estate_sector_df.index)
+# format the date index as '1/25/20'
+real_estate_sector_df.index = real_estate_sector_df.index.strftime('%-m/%-d/%y')
+# convert the index to datetime format
+precious_metals_df.index = pd.to_datetime(precious_metals_df.index)
+# format the date index as '1/25/20'
+precious_metals_df.index = precious_metals_df.index.strftime('%-m/%-d/%y')
+
+#Merge all the data into the Global dataframe created in Step3
+global_df = pd.merge(global_df, overall_american_market_df, how='left', left_index=True, right_index=True)
+global_df = pd.merge(global_df, overall_canadian_market_df, how='left', left_index=True, right_index=True)
+global_df = pd.merge(global_df, travel_sector_df, how='left', left_index=True, right_index=True)
+global_df = pd.merge(global_df, real_estate_sector_df, how='left', left_index=True, right_index=True)
+global_df = pd.merge(global_df, precious_metals_df, how='left', left_index=True, right_index=True)
+
+#Remove the rows with null values
+global_df = global_df.dropna()
+print(global_df)
+
+
 
 
