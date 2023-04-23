@@ -114,6 +114,58 @@ global_df = pd.merge(global_df, precious_metals_df, how='left', left_index=True,
 global_df = global_df.dropna()
 print(global_df)
 
+"""**Step 7:** 	Create an appropriate graph detailing your info - explain why you chose the graphs you did, use matplotlib"""
+
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+
+# create a figure with three subplots
+fig, (ax1, ax2,ax3) = plt.subplots(nrows=3, ncols=1, figsize=(10, 17))
+ax1.set_title('Global COVID-19 Confirmed Cases', fontsize=16)
+ax1.set_xlabel('Date', fontsize=14)
+ax1.set_ylabel('Number of Confirmed Cases', fontsize=14)
+ax1.plot(global_df.index, global_df['Confirmed Cases'], color='blue')
+ax1.xaxis.set_major_locator(ticker.IndexLocator(base=7, offset=0))
+
+ax2.set_title('Global COVID-19 Death Cases', fontsize=16)
+ax2.set_xlabel('Date', fontsize=14)
+ax2.set_ylabel('Number of Deaths', fontsize=14)
+ax2.plot(global_df.index, global_df['Deaths'], color='red')
+ax2.xaxis.set_major_locator(ticker.IndexLocator(base=7, offset=0))
+
+ax3.set_title('Global COVID-19 Stock Market Impact', fontsize=16)
+ax3.set_xlabel('Date', fontsize=14)
+ax3.set_ylabel('Stock Market Price', fontsize=14)
+
+ax3.plot(global_df.index, global_df['American Market(high)'], label='American Market - High', color='green', linestyle='--')
+ax3.plot(global_df.index, global_df['Canadian Market(high)'], label='Canadian Market - High', color='orange', linestyle='--')
+ax3.plot(global_df.index, global_df['Travel Sector(high)'], label='ravel Sector - High', color='red', linestyle='--')
+ax3.plot(global_df.index, global_df['RealEstate Sector(high)'], label='RealEstate Sector - High', color='yellow', linestyle='--')
+ax3.plot(global_df.index, global_df['Precious Metals(high)'], label='Precious Metals - High', color='blue', linestyle='--')
+
+ax3.xaxis.set_major_locator(ticker.IndexLocator(base=7, offset=0))
+ax3.yaxis.set_major_locator(ticker.IndexLocator(base=20, offset=0))
+
+plt.legend(loc = 'lower right')
+
+# display the plot
+plt.show()
+
+"""**Explanation of Selected Graphs**
+
+We have selected three different graphs as below 
+
+1. Covid-19 Confirmed cases Graph 
+2. Covid-19 Death Cases Graph
+3. Covid-19 Stock Market Impact
+
+Covid-19 Confirmed cases graph shows the daily covid confirmed cases across the year 2022 to 2023 . Covid-19 Death cases graph shows the daily covid death cases reported across the year 2022 to 2023 . Covid-19 Stock Market Impact graph indicates the impact of Covid-19 on various stock sectors (Overall American Market,Overall Canadian Market,Travel sector,The Real Estate sector,Precious metals) across the year 2022 to 2023. 
+
+We have selected above three graphs, because we can easily compare the stock market fluctuations when the confirmed/death cases vary on a daily basis.
+
+
+"""
 
 
 
